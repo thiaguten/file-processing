@@ -1,0 +1,47 @@
+package br.com.thiaguten
+
+import scala.util.{Failure, Success, Try}
+
+object Temp extends App {
+
+  sealed trait Type
+  case object GENERIC extends Type
+
+  sealed trait InputPayload {
+    def payload: Array[Byte]
+  }
+  case class GenericInputPayload(payload: Array[Byte]) extends InputPayload
+
+  def fromGENERIC[A <: InputPayload](event: A): Try[Array[Byte]] = Try(event.payload)
+  def toGENERIC[A <: Array[Byte]](payload: A): Try[InputPayload] = Try(GenericInputPayload(payload))
+
+  def deserialize[A <: Array[Byte]](payload: A, `type`: Type): Try[InputPayload] = {
+    `type` match {
+      case GENERIC => toGENERIC[A](payload)
+      case _ => Failure(sys.error("could not deserialize, unknown type"))
+    }
+  }
+
+  def serialize[A <: InputPayload](payload: A, `type`: Type): Try[Array[Byte]] = {
+    `type` match {
+      case GENERIC => fromGENERIC[A](payload)
+      case _ => Failure(sys.error("could not serialize, unknown type"))
+    }
+  }
+
+  val string = "thiago"
+
+  val inputPayload = deserialize(string.getBytes, GENERIC) match {
+    case Success(value) => value
+    case Failure(exception) => sys.error(exception.getMessage)
+  }
+
+  assert(new String(inputPayload.payload) == string)
+
+  val bytes = serialize(inputPayload, GENERIC) match {
+    case Success(value) => value
+    case Failure(exception) => sys.error(exception.getMessage)
+  }
+
+  assert(bytes sameElements inputPayload.payload)
+}

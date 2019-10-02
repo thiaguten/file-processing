@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds" debug="false">
+
+  <!--
+    Enable this if you want to see Logback configuring itself.
+    Always a good activate OnConsoleStatusListener.
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />-->
+
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+    <!-- reset all previous level configurations of all j.u.l. loggers -->
+    <resetJUL>true</resetJUL>
+  </contextListener>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!--
+      Note:
+
+        On Windows machines setting withJansi to true enables ANSI color code interpretation by the
+        Jansi library. This requires org.fusesource.jansi:jansi:1.8 on the class path. Note that
+        Unix-based operating systems such as Linux and Mac OS X support ANSI color codes by default.
+
+      Coloring:
+
+        Grouping by parentheses as explained above allows coloring of sub-patterns. As of version
+        1.0.5, PatternLayout recognizes "%black", "%red", "%green","%yellow","%blue", "%magenta",
+        "%cyan", "%white", "%gray", "%boldRed","%boldGreen", "%boldYellow", "%boldBlue",
+        "%boldMagenta""%boldCyan", "%boldWhite" and "%highlight" as conversion words. These
+        conversion words are intended to contain a sub-pattern. Any sub-pattern enclosed by a
+        coloring word will be output in the specified color. Below is a configuration file
+        illustrating coloring. Note the %cyan conversion specifier enclosing "%logger{15}".
+        This will output the logger name abbreviated to 15 characters in cyan.
+        The %highlight conversion specifier prints its sub-pattern in bold-red for events of level
+        ERROR, in red for WARN, in BLUE for INFO, and in the default color for other levels.
+    -->
+    <withJansi>true</withJansi>
+    <encoder>
+      <pattern>%d [%thread] %highlight(%-5level) %cyan(%logger{20}) - %msg %n</pattern>
+    </encoder>
+  </appender>
+
+  <!--<property name="LOG_HOME" value="/var/log/horus/temp"/>
+
+  <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/out.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/out-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <maxFileSize>100MB</maxFileSize>
+      <maxHistory>60</maxHistory>
+      <totalSizeCap>20GB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d [%thread] %-5level %logger{15} - %msg %n</pattern>
+    </encoder>
+  </appender>-->
+
+  <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+    <queueSize>256</queueSize>
+    <!-- By default, when the blocking queue has 20% capacity remaining, it will drop events of
+    level TRACE, DEBUG and INFO, keeping only events of level WARN and ERROR. To keep all events,
+    set discardingThreshold to 0. -->
+    <discardingThreshold>0</discardingThreshold>
+    <appender-ref ref="STDOUT"/>
+    <!--<appender-ref ref="ROLLING"/>-->
+  </appender>
+
+  <logger name="br.com.thiaguten" level="INFO"/>
+
+  <root level="INFO">
+    <appender-ref ref="ASYNC"/>
+  </root>
+
+</configuration>
