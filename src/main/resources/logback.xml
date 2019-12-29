@@ -14,13 +14,10 @@
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <!--
       Note:
-
         On Windows machines setting withJansi to true enables ANSI color code interpretation by the
         Jansi library. This requires org.fusesource.jansi:jansi:1.8 on the class path. Note that
         Unix-based operating systems such as Linux and Mac OS X support ANSI color codes by default.
-
       Coloring:
-
         Grouping by parentheses as explained above allows coloring of sub-patterns. As of version
         1.0.5, PatternLayout recognizes "%black", "%red", "%green","%yellow","%blue", "%magenta",
         "%cyan", "%white", "%gray", "%boldRed","%boldGreen", "%boldYellow", "%boldBlue",
@@ -34,11 +31,13 @@
     -->
     <withJansi>true</withJansi>
     <encoder>
-      <pattern>%d [%thread] %highlight(%-5level) %cyan(%logger{20}) - %msg %n</pattern>
+      <!--      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{0} - %msg%n%rEx</pattern>-->
+      <pattern>%d [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg%n%rEx</pattern>
     </encoder>
   </appender>
 
-  <!--<property name="LOG_HOME" value="/var/log/horus/temp"/>
+  <!--<property name="LOG_HOME" value="/var/log/file-processing"/>-->
+  <property name="LOG_HOME" value="log"/>
 
   <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${LOG_HOME}/out.log</file>
@@ -49,9 +48,10 @@
       <totalSizeCap>20GB</totalSizeCap>
     </rollingPolicy>
     <encoder>
-      <pattern>%d [%thread] %-5level %logger{15} - %msg %n</pattern>
+      <!--<pattern>%d [%thread] %-5level %logger{15} - %X{akkaSource} - %msg%n%rEx</pattern>-->
+      <pattern>%d [%thread] %-5level %logger{80} - %msg%n%rEx</pattern>
     </encoder>
-  </appender>-->
+  </appender>
 
   <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
     <queueSize>256</queueSize>

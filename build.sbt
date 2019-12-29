@@ -60,6 +60,9 @@ val slf4jVersion = "1.7.30"
 
 libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-api" % slf4jVersion,
+  "org.slf4j" % "log4j-over-slf4j" % slf4jVersion,
+  "org.slf4j" % "jul-to-slf4j" % slf4jVersion,
+  "org.slf4j" % "jcl-over-slf4j" % slf4jVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.3" % Runtime,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 )
