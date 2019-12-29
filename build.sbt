@@ -56,7 +56,7 @@ bashScriptExtraDefines ++= Seq(
   """addJava "-Dlogback.configurationFile=${app_home}/../conf/logback.xml""""
 )
 
-val slf4jVersion = "1.7.25"
+val slf4jVersion = "1.7.30"
 
 libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-api" % slf4jVersion,
